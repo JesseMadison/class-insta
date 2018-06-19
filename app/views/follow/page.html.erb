@@ -9,21 +9,14 @@
          <!-- only the users who are not a current user  -->
            <%= image_tag(user.profile.picture_url, class: "profile-follow-pic") %>
            <span class="follow-profile-name"><%= user.profile.name %></span>
-           <br>
-           <!-- if user.followings is an empty array, provide a link to follow -->
-           <% if current_user.followings == Array.new %>
-             <%= link_to 'follow', followings_path(:follower_id => user), method: :post, class: "btn btn-primary follow"%>
-           <% else %>
-              <!-- loop through user followings -->
-             <% current_user.followings.each do |following| %>
-                <!-- check if current user is already following a profile , give a link to unfollow-->
-                <% if user == following.followee %>
-                  <%= link_to 'unfollow', following, method: :delete, class: "btn btn-danger follow" %>
-                <% else %>
-                  <%= link_to 'follow', followings_path(:follower_id => user), method: :post, class: "btn btn-primary follow"%>
-                <% end %>
+
+            <!-- if user.followings is an empty array, provide a link to follow -->
+            <!-- check if the user is already been followed by current user, by parsings throught he array of users followers -->
+             <% if user.followers.include?(current_user) %>
+                <%= link_to 'unfollow', following_path(user), method: :delete, class: "btn btn-primary danger"%>
+             <% else %>
+              <%= link_to 'follow', followings_path(:follower_id => user), method: :post, class: "btn btn-primary follow"%>
              <% end %>
-          <% end %>
 
        </div>
     </div>
